@@ -1,0 +1,46 @@
+﻿@model CodeFirstMigrationNedir.Models.Etkinlik
+@{
+    ViewBag.Title = "Duzenle";
+    Layout = "~/Views/Etkinlik/Shared/_LayoutPage1.cshtml";
+}
+
+<h2>Duzenle</h2>
+<hr style="margin-bottom:10px" />
+<div class="formTasiyici">
+    <div class="formBaslik">
+        <h2>Etkinlik Düzenle</h2>
+    </div>
+    <div class="formIcerik">
+        @using (Html.BeginForm("Duzenle", "Etkinlik", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.HiddenFor(x => x.ID)
+            @Html.HiddenFor(x => x.Resim)
+            <div class="satir">
+                <lable>Isim</lable><br />
+                @Html.EditorFor(x => x.Isim, new { htmlattribute = new { @class = "metinKutuZorunlu", @autocomplate = "off" } })
+            </div>
+            <div class="satir">
+                <lable>Tarih</lable><br />
+                @Html.EditorFor(x => x.Tarih, new { htmlattribute = new { @class = "metinKutu" } })
+            </div>
+            <div class="satir">
+                <div style="float:left" width="200px">
+                    <img src="~/Assets/etkinlikResimleri/@Model.Resim" width="80px" />
+                </div>
+                <div style="float:left" width="500px">
+                    <label>Resim</label>
+                    <input type="file" class="metinKutu" name="dosyaResim" />
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div class="satir">
+                <label>Durum</label>
+                @Html.EditorFor(x => x.Durum)
+            </div>
+            <div class="satir">
+                <input type="submit" value="Etkinlik Ekle" class="ekleButton" />
+            </div>
+        }
+    </div>
+</div>
+

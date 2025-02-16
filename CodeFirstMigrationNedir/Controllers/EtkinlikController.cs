@@ -14,7 +14,7 @@ namespace CodeFirstMigrationNedir.Controllers
         // GET: Etkinlik
         public ActionResult Index()
         {
-            return View();
+            return View(db.Etkinlikler.ToList());
         }
         [HttpGet]
         public ActionResult Ekle()
@@ -33,14 +33,14 @@ namespace CodeFirstMigrationNedir.Controllers
                         FileInfo fi = new FileInfo(dosyaResim.FileName);
                         if (fi.Extension == ".jpg" || fi.Extension == ".png")
                         {
-                            string isim = Guid.NewGuid().ToString()+ fi.Extension;
+                            string isim = Guid.NewGuid().ToString() + fi.Extension;
                             model.Resim = isim;
-                            dosyaResim.SaveAs(Server.MapPath("../Assets/etkinlikResimleri/" +isim));
+                            dosyaResim.SaveAs(Server.MapPath("../Assets/etkinlikResimleri/" + isim));
                             db.Etkinlikler.Add(model);
                             db.SaveChanges();
                         }
                         else
-                        { 
+                        {
                             ViewBag.hataMesaj = "Dosya uzantısı jpg veya png olmalıdır.";
                         }
                     }
@@ -49,6 +49,40 @@ namespace CodeFirstMigrationNedir.Controllers
                 {
                     ViewBag.hataMesaj = "Bir Hata Oluştu";
                 }
+            }
+            return View(model);
+        }
+        [HttpGet]
+        public ActionResult Duzenle(int? id)
+        {
+            if (id != null)
+            {
+                Etkinlik model = db.Etkinlikler.Find(id);
+                if (model != null)
+                {
+                    return View(model);
+                }
+            }
+            return RedirectToAction("Index", "Etkinlik");
+
+        }
+        [HttpPost]
+        public ActionResult Duzenle(Etkinlik model, HttpPostedFileBase dosyaResim)
+        {
+            if (ModelState.IsValid)
+            {
+                if (dosyaResim != null)
+                {
+                    FileInfo fi = new FileInfo(dosyaResim.FileName);
+                    if (fi.Extension == ".jpg" || fi.Extension == ".png")
+                    {
+                        string isim = Guid.NewGuid().ToString() + fi.Extension;
+                        model.Resim = isim;
+                        dosyaResim.SaveAs(Server.MapPath("~/Assets/etkinlikResimleri/" + isim)); // Düzenlede serve path tilda işareti ile başlamalıdır. shift+ü;
+                    }
+                }
+                db.Entry(model).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
             }
             return View(model);
         }

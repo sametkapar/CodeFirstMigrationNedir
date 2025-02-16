@@ -11,7 +11,7 @@
 
         @if (ViewBag.hataMesaj != null)
         {
-            <labels style="color:red">@ViewBag.hataMesaj</labels>
+            <labels style="color:red">@ViewBag.hataMesaj</labels> @*hata mesaj viewbag özelliğinden dolayı controller içinden geliyor*@
         }
 
         @using (Html.BeginForm("Ekle", "Etkinlik", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -29,7 +29,7 @@
             <div class="satir">
                 <label>Resim</label><br />
                 <input type="file" class="metinKutu" name="dosyaResim" />
-            </div>
+            </div> @* dosyaResim ismi controller'a gönderdiğimiz isim aynı olmak zorunda*@
             <div class="satir">
                 <label>Durum</label>
                 @Html.EditorFor(x => x.Durum)
